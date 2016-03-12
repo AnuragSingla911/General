@@ -43,7 +43,7 @@ public class SplashActivity extends Activity {
 
             @Override
             protected MainModal doInBackground(Void... params) {
-                InputStream inputStream = getResources().openRawResource(R.raw.f_one);
+                InputStream inputStream = getResources().openRawResource(R.raw.f_two);
                 try {
                     String jsonString = readFully(inputStream);
                     MainModal modal = GeneralParser.parseMainModal(jsonString);

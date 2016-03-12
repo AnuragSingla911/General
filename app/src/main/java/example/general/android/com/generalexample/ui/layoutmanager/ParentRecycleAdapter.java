@@ -2,7 +2,6 @@ package example.general.android.com.generalexample.ui.layoutmanager;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,9 +12,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 import example.general.android.com.generalexample.R;
+import example.general.android.com.generalexample.Utility;
 import example.general.android.com.generalexample.modal.MainModal;
 
 /**
@@ -53,13 +53,24 @@ public class ParentRecycleAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         if (holder instanceof ImageHolder) {
-            Glide
+            ImageHolder holder1 = (ImageHolder)holder;
+            Picasso
                     .with(context)
                     .load(modal.getmSections().get(position).getmItems().get(0).getmImageUrl())
                     .centerCrop()
                     .placeholder(android.R.drawable.btn_radio)
-                    .crossFade()
-                    .into(((ImageHolder)holder).mImageView);
+                    .fit()
+                    .into(holder1.mImageView);
+            holder1.mImageView.setTag(modal.getmSections().get(position).getmItems().get(0).getWebUrl());
+            holder1.mImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String s = (String)v.getTag();
+                    Utility.handleClick(s, context);
+                }
+            });
+
+
         } else if (holder instanceof TemplateThree) {
             final TemplateThree templateThree = (TemplateThree) holder;
             templateThree.viewPager.setAdapter(new viewPagerAdapter(context, modal.getmSections().get(position)));

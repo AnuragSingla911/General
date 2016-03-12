@@ -1,16 +1,16 @@
 package example.general.android.com.generalexample.ui.layoutmanager;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 import example.general.android.com.generalexample.R;
+import example.general.android.com.generalexample.Utility;
 import example.general.android.com.generalexample.modal.Section;
 
 public class viewPagerAdapter extends PagerAdapter {
@@ -49,13 +49,21 @@ public class viewPagerAdapter extends PagerAdapter {
         LayoutInflater inflater = LayoutInflater.from(mcontext);
         View view = inflater.inflate(R.layout.single_item, container, false);
         ImageView image = (ImageView) view.findViewById(R.id.imageView);
-        Glide
+        Picasso
                 .with(mcontext)
                 .load(msection.getmItems().get(0).getmImageUrl())
-                .centerCrop()
+                .centerCrop().fit()
                 .placeholder(android.R.drawable.btn_radio)
-                .crossFade()
                 .into(image);
+        image.setTag(msection.getmItems().get(position).getWebUrl());
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String s = (String)v.getTag();
+                Utility.handleClick(s, mcontext);
+
+            }
+        });
         container.addView(view,0);
         return view;
 
