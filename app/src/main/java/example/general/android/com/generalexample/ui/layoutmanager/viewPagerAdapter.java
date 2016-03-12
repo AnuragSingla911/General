@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+
 import example.general.android.com.generalexample.R;
 import example.general.android.com.generalexample.modal.Section;
 
@@ -27,6 +29,12 @@ public class viewPagerAdapter extends PagerAdapter {
     }
 
     @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
+
+
+    @Override
     public boolean isViewFromObject(View view, Object object) {
         return view == object;
     }
@@ -41,8 +49,14 @@ public class viewPagerAdapter extends PagerAdapter {
         LayoutInflater inflater = LayoutInflater.from(mcontext);
         View view = inflater.inflate(R.layout.single_item, container, false);
         ImageView image = (ImageView) view.findViewById(R.id.imageView);
-        image.setBackgroundColor(Color.GRAY);
-        image.setImageResource(android.R.drawable.btn_dropdown);
+        Glide
+                .with(mcontext)
+                .load(msection.getmItems().get(0).getmImageUrl())
+                .centerCrop()
+                .placeholder(android.R.drawable.btn_radio)
+                .crossFade()
+                .into(image);
+        container.addView(view,0);
         return view;
 
     }

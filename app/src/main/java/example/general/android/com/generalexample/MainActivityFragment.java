@@ -1,5 +1,7 @@
 package example.general.android.com.generalexample;
 
+import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,7 +40,24 @@ public class MainActivityFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_main, container, false);
         mParentRecyclerView = (RecyclerView)view.findViewById(R.id.parentRecyclerview);
         mParentRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        mParentRecyclerView.setAdapter(new ParentRecycleAdapter(getActivity(),modal));
+        mParentRecyclerView.setAdapter(new ParentRecycleAdapter(getActivity(), modal));
+        mParentRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+                super.onDraw(c, parent, state);
+            }
+
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+
+                if (parent.getChildAdapterPosition(view) != 0) {
+                    outRect.top = 20;
+                }
+
+            }
+        });
+
         return view;
     }
 }

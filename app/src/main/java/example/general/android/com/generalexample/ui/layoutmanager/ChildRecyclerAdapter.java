@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
+
 import example.general.android.com.generalexample.R;
 import example.general.android.com.generalexample.modal.Section;
 
@@ -35,8 +37,13 @@ public class ChildRecyclerAdapter extends RecyclerView.Adapter<ChildRecyclerAdap
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.mImageView.setBackgroundColor(Color.RED);
-        holder.mImageView.setImageResource(android.R.drawable.btn_radio);
+        Glide
+                .with(mContext)
+                .load(mSection.getmItems().get(0).getmImageUrl())
+                .centerCrop()
+                .placeholder(android.R.drawable.btn_radio)
+                .crossFade()
+                .into(holder.mImageView);
     }
 
     @Override

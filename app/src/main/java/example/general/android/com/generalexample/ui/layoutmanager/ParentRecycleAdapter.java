@@ -1,7 +1,9 @@
 package example.general.android.com.generalexample.ui.layoutmanager;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 import example.general.android.com.generalexample.R;
 import example.general.android.com.generalexample.modal.MainModal;
@@ -49,8 +53,13 @@ public class ParentRecycleAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         if (holder instanceof ImageHolder) {
-            ((ImageHolder) holder).mImageView.setBackgroundColor(Color.RED);
-            ((ImageHolder) holder).mImageView.setImageResource(android.R.drawable.btn_minus);
+            Glide
+                    .with(context)
+                    .load(modal.getmSections().get(position).getmItems().get(0).getmImageUrl())
+                    .centerCrop()
+                    .placeholder(android.R.drawable.btn_radio)
+                    .crossFade()
+                    .into(((ImageHolder)holder).mImageView);
         } else if (holder instanceof TemplateThree) {
             final TemplateThree templateThree = (TemplateThree) holder;
             templateThree.viewPager.setAdapter(new viewPagerAdapter(context, modal.getmSections().get(position)));
@@ -76,6 +85,22 @@ public class ParentRecycleAdapter extends RecyclerView.Adapter<RecyclerView.View
             TemplateSecond second = (TemplateSecond) holder;
             second.mRecyclerView.setAdapter(new ChildRecyclerAdapter(context, modal.getmSections().get(position)));
             second.mRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+            second.mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+                @Override
+                public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+                    super.onDraw(c, parent, state);
+                }
+
+                @Override
+                public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                    super.getItemOffsets(outRect, view, parent, state);
+
+                    if(parent.getChildAdapterPosition(view) != 0){
+                        outRect.left = 10;
+                    }
+
+                }
+            });
 
         }
 
